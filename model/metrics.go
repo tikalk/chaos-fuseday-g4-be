@@ -14,3 +14,10 @@ type OverallMetrics struct {
 	ElasticSearch	[2]float64		`json:"elastic_search"`
 	Kibana			[2]float64		`json:"kibana"`
 }
+
+type EsHits struct {
+	Total int						`json:"total"`
+}
+type EsResp struct {
+	Hits			EsHits			`json:"hits"`
+}

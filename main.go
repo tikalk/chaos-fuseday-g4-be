@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"github.com/tikalk/chaos_fuze_2019/controllers"
+	"github.com/tikalk/chaos-fuseday-g4-be/controllers"
 )
 
 func main(){
