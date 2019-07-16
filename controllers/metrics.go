@@ -30,33 +30,39 @@ var es_body = []byte(`{
 }`)
 func GetMetrics(w http.ResponseWriter, r *http.Request) {
 
-	url := fmt.Sprintf(string(es_body), time.Now().String(), time.Now().Add(time.Duration(-5) * time.Second).String())
-	resp, err := http.Post(
-		url,
-		"application/json", bytes.NewBuffer(es_body))
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-
-	esRes := &model.EsResp{}
-	err = json.Unmarshal(body, &esRes)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+	fmt.Println("Got a request")
 
 
-	res := &model.OverallMetrics{ElasticSearch: [...]float64{0.0, float64(esRes.Hits.Total)}}
+	res := &model.OverallMetrics{ElasticSearch: [...]float64{0.0, getESMetrics()}}
 	ser, err := json.Marshal(res)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Write(ser)
 
+}
+
+func getESMetrics() float64 {
+	url := fmt.Sprintf(string(es_body), time.Now().String(), time.Now().Add(time.Duration(-5) * time.Second).String())
+	resp, err := http.Post(
+		url,
+		"application/json", bytes.NewBuffer(es_body))
+	if err != nil {
+		return 0
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 0
+	}
+
+	esRes := &model.EsResp{}
+	err = json.Unmarshal(body, &esRes)
+	if err != nil {
+		return 0
+	}
+
+	return float64(esRes.Hits.Total)
 }

@@ -6,6 +6,7 @@ import (
 )
 
 func main(){
+	println("Server starting...")
 	http.HandleFunc("/metrics", controllers.GetMetrics)
 	http.ListenAndServe("0.0.0.0:8080", nil)
 }
