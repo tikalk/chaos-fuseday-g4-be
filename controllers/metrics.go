@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"encoding/json"
 	"bytes"
-	"fmt"
 	"github.com/tikalk/chaos-fuseday-g4-be/model"
 	"io/ioutil"
 )
@@ -47,9 +46,8 @@ func GetMetrics(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	fmt.Println(esRes.Hits.Total)
 
-	res := &model.OverallMetrics{}
+	res := &model.OverallMetrics{ElasticSearch: [...]float64{0.0, float64(esRes.Hits.Total)}}
 	ser, err := json.Marshal(res)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
