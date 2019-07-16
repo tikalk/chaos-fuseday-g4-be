@@ -38,8 +38,6 @@ func GetMetrics(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	fmt.Println(url)
-
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
