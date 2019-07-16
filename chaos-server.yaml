@@ -6,8 +6,8 @@ metadata:
   creationTimestamp: 2019-07-16T12:17:10Z
   generation: 1
   labels:
-    run: chsos-server
-  name: chsos-server
+    run: chaos-server
+  name: chaos-server
   namespace: default
   resourceVersion: "69262"
   selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/chaos-server
@@ -18,7 +18,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      run: chsos-server
+      run: chaos-server
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -28,12 +28,12 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: chsos-server
+        run: chaos-server
     spec:
       containers:
       - image: royptikal/chaos-server
         imagePullPolicy: Always
-        name: chsos-server
+        name: chaos-server
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
