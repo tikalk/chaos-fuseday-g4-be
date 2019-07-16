@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"github.com/tikalk/chaos-fuseday-g4-be/model"
 	"io/ioutil"
+	"fmt"
+	"time"
 )
 
 var es_url = "http://localhost:9200/_search"
@@ -17,8 +19,8 @@ var es_body = []byte(`{
                 {
                     "range" : {
                         "@timestamp": {
-                            "gte": "2019-07-16T07:48:45.579412449+00:00",
-                            "lte": "2019-07-16T08:48:45.579412449+00:00"
+                            "gte": "%s",
+                            "lte": "%s"
                         }
                     }
                 }
@@ -28,10 +30,15 @@ var es_body = []byte(`{
 }`)
 func GetMetrics(w http.ResponseWriter, r *http.Request) {
 
-	resp, err := http.Post(es_url, "application/json", bytes.NewBuffer(es_body))
+	url := fmt.Sprintf(string(es_body), time.Now().String(), time.Now().Add(time.Duration(-5) * time.Second).String())
+	resp, err := http.Post(
+		url,
+		"application/json", bytes.NewBuffer(es_body))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
+
+	fmt.Println(url)
 
 	defer resp.Body.Close()
 
